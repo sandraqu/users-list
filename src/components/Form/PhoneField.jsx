@@ -22,6 +22,7 @@ const PhoneField = ({ phoneNumber, setPhoneNumber }) => {
       helperText={
         !phoneNumber.match(regex) && "Please enter a valid phone number"
       }
+      sx={{ m: 1 }}
     />
   );
 };

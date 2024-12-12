@@ -1,14 +1,21 @@
-import { useState, useContext } from "react";
-import { UserContext } from "../../context/userContext";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import PhoneField from "./PhoneField";
 import { Box, Button } from "@mui/material";
 import AddCircleRoundedIcon from "@mui/icons-material/AddCircleRounded";
 
 const FormDetails = () => {
-  const { user } = useContext(UserContext);
   const navigate = useNavigate();
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [isDisabled, setIsDisabled] = useState(true);
+
+  useEffect(() => {
+    if (/^\d{10}$/.test(phoneNumber.replace(/-/g, ""))) {
+      setIsDisabled(false);
+    } else {
+      setIsDisabled(true);
+    }
+  }, [phoneNumber]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -32,23 +39,25 @@ const FormDetails = () => {
       <h1>FormDetails: Part 2 of 2</h1>
       <Box
         component="form"
-        sx={{ "& .MuiTextField-root": { m: 1, width: "25ch" } }}
+        sx={{
+          "& .MuiTextField-root": {
+            m: 1,
+          },
+          display: "flex",
+          flexDirection: "column",
+        }}
         autoComplete="off"
       >
-        <div>
-          <PhoneField
-            phoneNumber={phoneNumber}
-            setPhoneNumber={setPhoneNumber}
-          />
-        </div>
+        <PhoneField phoneNumber={phoneNumber} setPhoneNumber={setPhoneNumber} />
         <Button
           type="submit"
-          disabled={phoneNumber === ""}
+          disabled={isDisabled}
           variant="contained"
           color="primary"
           size="large"
           endIcon={<AddCircleRoundedIcon />}
           onClick={handleSubmit}
+          sx={{ m: 1 }}
         >
           Add User: Complete
         </Button>

@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { UserContext } from "../../context/userContext";
 import { Box, Button, TextField } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
@@ -16,22 +16,6 @@ const FormDob = () => {
     year: "",
   });
   const [isDisabled, setIsDisabled] = useState(true);
-  let fieldIssue = "";
-  const handleDisabled = () => {
-    if (firstName.trim() === "") {
-      fieldIssue += "First name is required. ";
-    }
-    if (lastName.trim() === "") {
-      fieldIssue += "Last name is required. ";
-    }
-    if (firstName === "First Name") {
-      fieldIssue += "First name is required. ";
-    }
-    if (lastName === "Last Name") {
-      fieldIssue += "Last name is required. ";
-    }
-    if (fieldIssue === "") setIsDisabled(false);
-  };
 
   const handleLastNameChange = (event) => {
     setLastName(event.target.value);
@@ -57,6 +41,14 @@ const FormDob = () => {
     navigate("/form/details");
   };
 
+  useEffect(() => {
+    if (firstName && lastName) {
+      setIsDisabled(false);
+    } else {
+      setIsDisabled(true);
+    }
+  }, [firstName, lastName]);
+
   return (
     <div>
       <Button variant="text" component={Link} onClick={() => navigate(-1)}>
@@ -65,36 +57,55 @@ const FormDob = () => {
       <h1>Add User: Part 1 of 2</h1>
       <Box
         component="form"
-        sx={{ "& .MuiTextField-root": { m: 1, width: "25ch" } }}
+        sx={{
+          "& .MuiTextField-root": {
+            m: 1,
+          },
+        }}
         autoComplete="off"
       >
-        <div>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+          }}
+        >
           <TextField
             id="first-name"
             label="First Name"
             value={firstName}
             onChange={handleFirstNameChange}
+            sx={{ flex: 1 }}
           />
           <TextField
             id="last-name"
             label="Last Name"
             value={lastName}
             onChange={handleLastNameChange}
+            sx={{ flex: 1 }}
             // helperText="Incorrect entry."
           />
         </div>
         <DobField setDob={setDob} />
-        <Button
-          type="submit"
-          disabled={isDisabled}
-          variant="contained"
-          color="primary"
-          size="large"
-          endIcon={<AddCircleRoundedIcon />}
-          onClick={handleSubmit}
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+          }}
         >
-          Add User: Continue
-        </Button>
+          <Button
+            type="submit"
+            disabled={isDisabled}
+            variant="contained"
+            color="primary"
+            size="large"
+            endIcon={<AddCircleRoundedIcon />}
+            onClick={handleSubmit}
+            sx={{ m: 1, flex: 1 }}
+          >
+            Add User: Continue
+          </Button>
+        </div>
       </Box>
     </div>
   );
