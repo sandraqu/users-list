@@ -502,7 +502,7 @@ export const handlers = [
     const userIndex = users.findIndex((user) => user.id === req.params.id);
     users[userIndex] = updatedUser;
     // return res(ctx.status(204));
-    return HttpResponse.json(updatedUser);
+    return HttpResponse.json({});
   }),
   http.delete("/api/v1/users/:id", (req, res, ctx) => {
     users = users.filter((user) => user.id !== req.params.id);
