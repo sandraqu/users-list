@@ -12,11 +12,9 @@ const Users = () => {
 
   useEffect(() => {
     const getUsers = async () => {
-      const response = await axios.get("https://localhost:5176/api/v1/users");
-      const data = await response.data;
-      SetUsers(data);
+      const response = await axios.get("/api/v1/users");
+      SetUsers(response.data);
     };
-
     getUsers();
   }, []);
 
@@ -33,6 +31,13 @@ const Users = () => {
         Add New User
       </Button>
       <Divider />
+      {users.map((user) => (
+        <div key={user.id}>
+          <p>
+            {user.firstName} {user.lastName}
+          </p>
+        </div>
+      ))}
     </div>
   );
 };

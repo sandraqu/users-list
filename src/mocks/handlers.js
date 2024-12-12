@@ -487,26 +487,23 @@ let users = [
 
 export const handlers = [
   http.get("/api/v1/users", (req, res, ctx) => {
-    // return res(ctx.status(200), ctx.json(users));
     return HttpResponse.json(users);
   }),
   http.post("/api/v1/users", (req, res, ctx) => {
     const newUser = req.body;
     newUser.id = users.length + 1;
     users.push(newUser);
-    // return res(ctx.status(201), ctx.json(newUser));
     return HttpResponse.json(newUser);
   }),
   http.put("/api/v1/users/:id", (req, res, ctx) => {
+    const { id } = req.params;
     const updatedUser = req.body;
-    const userIndex = users.findIndex((user) => user.id === req.params.id);
+    const userIndex = users.findIndex((user) => user.id === id);
     users[userIndex] = updatedUser;
-    // return res(ctx.status(204));
     return HttpResponse.json({});
   }),
   http.delete("/api/v1/users/:id", (req, res, ctx) => {
     users = users.filter((user) => user.id !== req.params.id);
-    // return res(ctx.status(204));
     return HttpResponse.json({});
   }),
 ];
