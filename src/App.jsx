@@ -1,8 +1,8 @@
 import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Users from "./components/Users";
-import FormDob from "./components/Form/FormDob";
-import FormDetails from "./components/Form/FormDetails";
+import FormPart1 from "./components/Form/FormPart1";
+import FormPart2 from "./components/Form/FormPart2";
 import { UserProvider } from "./context/userContext";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
@@ -50,8 +50,8 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Users />} />
-            <Route path="/form/dob" element={<FormDob />} />
-            <Route path="/form/details" element={<FormDetails />} />
+            <Route path="/form/part/1" element={<FormPart1 />} />
+            <Route path="/form/part/2" element={<FormPart2 />} />
           </Routes>
         </BrowserRouter>
       </UserProvider>

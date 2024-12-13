@@ -1,10 +1,20 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import { UserContext } from "../../context/userContext";
 import { Link, useNavigate } from "react-router-dom";
 import PhoneField from "./PhoneField";
 import { Box, Button } from "@mui/material";
 import AddCircleRoundedIcon from "@mui/icons-material/AddCircleRounded";
 
-const FormDetails = () => {
+/**
+ * This component renders a form for the second part of the user creation form.
+ * The form consists of a phone field and a submit button. When the form is
+ * submitted, the phone number is added to the user's phones in the userContext
+ * state and the user is navigated to the users list.
+ *
+ * @returns A JSX element representing the form.
+ */
+const FormPart2 = () => {
+  const { user, setUser } = useContext(UserContext);
   const navigate = useNavigate();
   const [phoneNumber, setPhoneNumber] = useState("");
   const [isDisabled, setIsDisabled] = useState(true);
@@ -66,4 +76,4 @@ const FormDetails = () => {
   );
 };
 
-export default FormDetails;
+export default FormPart2;

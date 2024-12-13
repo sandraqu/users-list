@@ -1,20 +1,51 @@
-import { useState } from "react";
 import TextField from "@mui/material/TextField";
-const DobField = ({ setDob }) => {
-  const [day, setDay] = useState("");
-  const [month, setMonth] = useState("");
-  const [year, setYear] = useState("");
+import { useState, useEffect } from "react";
+const DobField = ({ setField }) => {
+  const [dob, setDob] = useState({
+    day: "",
+    month: "",
+    year: "",
+  });
 
-  const handleDayChange = (event) => {
-    const newDay = event.target.value;
-
-    // Check if newDay is a valid number between 1 and 31
-    if (validateDay(newDay)) {
-      setDay(newDay);
-      setDob((prevDob) => ({ ...prevDob, day: newDay }));
+  const validate = (name, value) => {
+    switch (name) {
+      case "day":
+        return validateDay(value);
+      case "month":
+        return validateMonth(value);
+      case "year":
+        return validateYear(value);
+      default:
+        return true;
+    }
+  };
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    if (value === "") {
+      setDob((prevField) => {
+        return {
+          ...prevField,
+          [name]: "",
+        };
+      });
     } else {
-      console.error(`Invalid day entered: ${newDay}`);
-      // Optionally display an error message to the user
+      const isFieldValid = validate(name, value);
+
+      if (isFieldValid) {
+        setDob((prevDob) => {
+          return {
+            ...prevDob,
+            [name]: value,
+          };
+        });
+
+        setField((prevField) => {
+          return {
+            ...prevField,
+            dob: dob.year + "-" + dob.month + "-" + dob.day,
+          };
+        });
+      }
     }
   };
 
@@ -23,40 +54,16 @@ const DobField = ({ setDob }) => {
     return !isNaN(parsedValue) && parsedValue >= 1 && parsedValue <= 31;
   };
 
-  const handleMonthChange = (event) => {
-    const newMonth = event.target.value;
-
-    // Check if newMonth is a valid number between 1 and 31
-    if (validateMonth(newMonth)) {
-      setMonth(newMonth);
-      setDob((prevDob) => ({ ...prevDob, month: newMonth }));
-    } else {
-      console.error(`Invalid day entered: ${newMonth}`);
-      // Optionally display an error message to the user
-    }
-  };
-
   const validateMonth = (value) => {
     const parsedValue = parseInt(value, 10);
     return !isNaN(parsedValue) && parsedValue >= 1 && parsedValue <= 12;
   };
 
-  const handleYearChange = (event) => {
-    const newYear = event.target.value;
-
-    // Check if newYear is a valid number between 1 and 31
-    if (validateYear(newYear)) {
-      setYear(newYear);
-      setDob((prevDob) => ({ ...prevDob, year: newYear }));
-    } else {
-      console.error(`Invalid day entered: ${newYear}`);
-      // Optionally display an error message to the user
-    }
-  };
-
   const validateYear = (value) => {
-    const parsedValue = parseInt(value, 10);
-    return !isNaN(parsedValue) && parsedValue >= 1000 && parsedValue <= 9999;
+    if (value.length > 0) {
+      return value.length <= 4 && !isNaN(parseInt(value));
+    }
+    return false;
   };
 
   return (
@@ -65,23 +72,26 @@ const DobField = ({ setDob }) => {
         id="month"
         label="Month"
         type="number"
-        value={month}
-        onChange={handleMonthChange}
+        value={dob.month}
+        name="month"
+        onChange={handleChange}
       />
       <TextField
         id="day"
         label="Day"
         type="number"
-        value={day}
-        onChange={handleDayChange}
+        value={dob.day}
+        name="day"
+        onChange={handleChange}
       />
 
       <TextField
         id="year"
         label="Year"
         type="number"
-        value={year}
-        onChange={handleYearChange}
+        value={dob.year}
+        name="year"
+        onChange={handleChange}
       />
     </div>
   );

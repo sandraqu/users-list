@@ -26,7 +26,7 @@ const Users = () => {
         color="primary"
         size="large"
         endIcon={<AddCircleRoundedIcon />}
-        onClick={() => navigate("/form/dob")}
+        onClick={() => navigate("/form/part/1")}
       >
         Add New User
       </Button>

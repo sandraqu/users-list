@@ -12,8 +12,8 @@ const UserProvider = ({ children }) => {
     // lastName: 'D0e',
     // legalName: 'Benjamin D0e',
     // dob: '1963-04-22',
-    // emails: [{ id: 90000, typeId: 1, email: 'iklas@oneadvisory.co' }],
-    // phones: [{ id: 90000, typeId: 3, countryCodeID: 1, number: '1112223344' }],
+    emails: [{ id: 90000, typeId: 1, email: "iklas@oneadvisory.co" }],
+    phones: [{ id: 90000, typeId: 3, countryCodeID: 1, number: "1112223344" }],
     maritalStatusId: 1,
     employment: {
       employer: "Bank of America",

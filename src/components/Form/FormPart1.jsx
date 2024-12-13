@@ -5,26 +5,24 @@ import { Link, useNavigate } from "react-router-dom";
 import AddCircleRoundedIcon from "@mui/icons-material/AddCircleRounded";
 import DobField from "./DobField";
 
-const FormDob = () => {
+const FormPart1 = () => {
   const { user, setUser } = useContext(UserContext);
   const navigate = useNavigate();
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [dob, setDob] = useState({
-    day: "",
-    month: "",
-    year: "",
+  const [field, setField] = useState({
+    firstName: "",
+    lastName: "",
+    dob: "",
   });
   const [isDisabled, setIsDisabled] = useState(true);
 
-  const handleLastNameChange = (event) => {
-    setLastName(event.target.value);
-    handleDisabled();
-  };
-
-  const handleFirstNameChange = (event) => {
-    setFirstName(event.target.value);
-    handleDisabled();
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setField((prevField) => {
+      return {
+        ...prevField,
+        [name]: value,
+      };
+    });
   };
 
   const handleSubmit = (event) => {
@@ -33,21 +31,21 @@ const FormDob = () => {
     setUser((prevUser) => {
       return {
         ...prevUser,
-        firstName,
-        lastName,
-        dob: dob.year + "-" + dob.month + "-" + dob.day,
+        firstName: field.firstName,
+        lastName: field.lastName,
+        dob: field.dob,
       };
     });
-    navigate("/form/details");
+    navigate("/form/part/2");
   };
 
   useEffect(() => {
-    if (firstName && lastName) {
+    if (field.firstName && field.lastName) {
       setIsDisabled(false);
     } else {
       setIsDisabled(true);
     }
-  }, [firstName, lastName]);
+  }, [field.firstName, field.lastName]);
 
   return (
     <div>
@@ -73,20 +71,22 @@ const FormDob = () => {
           <TextField
             id="first-name"
             label="First Name"
-            value={firstName}
-            onChange={handleFirstNameChange}
+            value={field.firstName}
+            name="firstName"
+            onChange={handleChange}
             sx={{ flex: 1 }}
           />
           <TextField
             id="last-name"
             label="Last Name"
-            value={lastName}
-            onChange={handleLastNameChange}
+            value={field.lastName}
+            name="lastName"
+            onChange={handleChange}
             sx={{ flex: 1 }}
             // helperText="Incorrect entry."
           />
         </div>
-        <DobField setDob={setDob} />
+        <DobField setField={setField} />
         <div
           style={{
             display: "flex",
@@ -111,4 +111,4 @@ const FormDob = () => {
   );
 };
 
-export default FormDob;
+export default FormPart1;
