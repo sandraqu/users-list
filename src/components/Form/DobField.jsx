@@ -1,13 +1,71 @@
 import TextField from "@mui/material/TextField";
 import { useState, useEffect } from "react";
+
+const MIN_AGE_REQUIRED = 18;
+
 const DobField = ({ setField }) => {
-  const [dob, setDob] = useState({
+  const [dateOfBirth, setDateOfBirth] = useState({
     day: "",
     month: "",
     year: "",
   });
+  const [isValidAgeRange, setIsValidAgeRange] = useState(false);
+  const [hasValidDob, setHasValidDob] = useState(false);
 
-  const validate = (name, value) => {
+  useEffect(() => {
+    const ageRangeIsValid = validateAgeRange(
+      dateOfBirth.year,
+      dateOfBirth.month,
+      dateOfBirth.day
+    );
+    setIsValidAgeRange(ageRangeIsValid);
+  }, [dateOfBirth]);
+
+  const validateAgeRange = (year, month, day) => {
+    if (!year || !month || !day) {
+      return false;
+    }
+
+    if (year.length !== 4) {
+      return false;
+    }
+
+    const birthDate = new Date(`${year}-${month}-${day}`);
+
+    // Check if the birthDate is a valid date and not in the future
+    if (isNaN(birthDate) || birthDate > new Date()) {
+      return false;
+    }
+
+    const ageDiffMs = new Date() - birthDate;
+    const ageInYears = new Date(ageDiffMs).getUTCFullYear() - 1970;
+
+    return ageInYears >= MIN_AGE_REQUIRED && ageInYears <= 120;
+  };
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+
+    if (value === "") {
+      setDateOfBirth((prev) => ({ ...prev, [name]: "" }));
+      setHasValidDob(false);
+    } else {
+      const isValid = validateDob(name, value);
+      setHasValidDob(isValid);
+
+      if (isValid) {
+        setDateOfBirth((prev) => ({ ...prev, [name]: value }));
+        if (isValidAgeRange) {
+          setField((prev) => ({
+            ...prev,
+            dob: `${dateOfBirth.year}-${dateOfBirth.month}-${dateOfBirth.day}`,
+          }));
+        }
+      }
+    }
+  };
+
+  const validateDob = (name, value) => {
     switch (name) {
       case "day":
         return validateDay(value);
@@ -17,35 +75,6 @@ const DobField = ({ setField }) => {
         return validateYear(value);
       default:
         return true;
-    }
-  };
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    if (value === "") {
-      setDob((prevField) => {
-        return {
-          ...prevField,
-          [name]: "",
-        };
-      });
-    } else {
-      const isFieldValid = validate(name, value);
-
-      if (isFieldValid) {
-        setDob((prevDob) => {
-          return {
-            ...prevDob,
-            [name]: value,
-          };
-        });
-
-        setField((prevField) => {
-          return {
-            ...prevField,
-            dob: dob.year + "-" + dob.month + "-" + dob.day,
-          };
-        });
-      }
     }
   };
 
@@ -72,7 +101,7 @@ const DobField = ({ setField }) => {
         id="month"
         label="Month"
         type="number"
-        value={dob.month}
+        value={dateOfBirth.month}
         name="month"
         onChange={handleChange}
       />
@@ -80,16 +109,15 @@ const DobField = ({ setField }) => {
         id="day"
         label="Day"
         type="number"
-        value={dob.day}
+        value={dateOfBirth.day}
         name="day"
         onChange={handleChange}
       />
-
       <TextField
         id="year"
         label="Year"
         type="number"
-        value={dob.year}
+        value={dateOfBirth.year}
         name="year"
         onChange={handleChange}
       />
