@@ -46,7 +46,7 @@ const FormPart2 = () => {
       <Button variant="text" component={Link} onClick={() => navigate(-1)}>
         go Back
       </Button>
-      <h1>FormDetails: Part 2 of 2</h1>
+      <h1>Add Phone: Part 2 of 2</h1>
       <Box
         component="form"
         sx={{
