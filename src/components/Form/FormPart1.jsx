@@ -4,6 +4,7 @@ import { Box, Button, TextField } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import AddCircleRoundedIcon from "@mui/icons-material/AddCircleRounded";
 import DobField from "./DobField";
+import axios from "axios";
 
 const FormPart1 = () => {
   const { user, setUser } = useContext(UserContext);
@@ -25,6 +26,14 @@ const FormPart1 = () => {
     });
   };
 
+  const addUser = async () => {
+    // post
+
+    const response = await axios.post("/api/v1/users", user);
+    const newUser = response.data;
+    setUser(newUser);
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
 
@@ -36,6 +45,9 @@ const FormPart1 = () => {
         dob: field.dob,
       };
     });
+
+    // post
+    addUser();
     navigate("/form/part/2");
   };
 

@@ -7,7 +7,6 @@ const UserContext = createContext({
 
 const UserProvider = ({ children }) => {
   const [user, setUser] = useState({
-    // id: 90000,
     // firstName: 'Benjamin',
     // lastName: 'D0e',
     // legalName: 'Benjamin D0e',

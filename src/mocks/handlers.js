@@ -486,24 +486,35 @@ let users = [
 ];
 
 export const handlers = [
-  http.get("/api/v1/users", (req, res, ctx) => {
+  http.get("/api/v1/users", () => {
     return HttpResponse.json(users);
   }),
-  http.post("/api/v1/users", (req, res, ctx) => {
-    const newUser = req.body;
+  http.post("/api/v1/users", async ({ request }) => {
+    const newUser = await request.json();
     newUser.id = users.length + 1;
     users.push(newUser);
-    return HttpResponse.json(newUser);
+    return HttpResponse.json(newUser, { status: 201 });
   }),
-  http.put("/api/v1/users/:id", (req, res, ctx) => {
-    const { id } = req.params;
-    const updatedUser = req.body;
+  http.put("/api/v1/users/:id", async ({ params }) => {
+    const { id } = params;
+    const updatedUser = await request.json();
     const userIndex = users.findIndex((user) => user.id === id);
+    if (userIndex === -1) {
+      return new HttpResponse(null, { status: 404 });
+    }
+    const editedUser = users[userIndex];
     users[userIndex] = updatedUser;
-    return HttpResponse.json({});
+    return HttpResponse.json(editedUser, { status: 204 });
   }),
-  http.delete("/api/v1/users/:id", (req, res, ctx) => {
-    users = users.filter((user) => user.id !== req.params.id);
-    return HttpResponse.json({});
+  http.delete("/api/v1/users/:id", async ({ params }) => {
+    const { id } = params;
+    const userIndex = users.findIndex((user) => user.id === id);
+    if (userIndex === -1) {
+      return new HttpResponse(null, { status: 404 });
+    }
+    const deletedUser = users[userIndex];
+
+    users = users.filter((user) => user.id !== id);
+    return HttpResponse.json(deletedUser);
   }),
 ];
